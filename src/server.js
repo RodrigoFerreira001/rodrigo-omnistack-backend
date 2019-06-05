@@ -1,0 +1,38 @@
+const express = require("express");
+const mongoose = require("mongoose");
+const path = require("path");
+const cors = require("cors");
+
+const app = express();
+
+app.use(cors);
+
+const server = require("http").Server(app);
+const io = require("socket.io")(server);
+
+io.on("connection", socket =>{
+    socket.on("connectRoom", box =>{
+        socket.join(box);
+    })
+});
+
+mongoose.connect("mongodb+srv://rodrigoferreira:senhamuitoforte@cluster0-4eu0p.mongodb.net/omnistack?retryWrites=true&w=majority", {
+    useNewUrlParser: true
+});
+
+app.use((req, res, next) => {
+    req.io = io;
+
+    return next();
+})
+
+
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+app.use("/files", express.static(path.resolve(__dirname, "..", "tmp")));
+
+//Informa arquivo de rotas
+app.use(require("./routes"));
+
+//Define qual porta o server vai ouvir
+server.listen(8889);
