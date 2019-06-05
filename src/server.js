@@ -35,4 +35,4 @@ app.use("/files", express.static(path.resolve(__dirname, "..", "tmp")));
 app.use(require("./routes"));
 
 //Define qual porta o server vai ouvir
-server.listen(8889);
+server.listen(process.env.PORT || 8889);
