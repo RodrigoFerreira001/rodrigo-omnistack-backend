@@ -3,7 +3,6 @@ const Box = require("../models/Box");
 class BoxController{
     async store(req, res) {
         const box = await Box.create({ title: req.body.title});
-        console.log("CARALHO");
         return res.json(box);
     }
 
